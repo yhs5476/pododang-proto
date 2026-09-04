@@ -1,0 +1,8 @@
+{
+  "name": "포도당 보호자앱",
+  "description": "간병 및 병원 동행을 위한 포도당 보호자용 프로토타입 앱",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
