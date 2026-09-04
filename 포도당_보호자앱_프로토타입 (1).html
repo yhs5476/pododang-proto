@@ -1,0 +1,1099 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<meta charset="utf-8">
+<title>포도당 유저테스트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ════ 설계서 1.1 컬러 ════ */
+:root{
+  --pri:#7951D6;--prs:#5F3EB0;--lt:#F1EDFC;--bg:#F7F6FB;--sf:#FFFFFF;--bd:#E5E8EB;
+  --ink:#191F28;--gray:#6B7684;--gray2:#8B95A1;--dis:#B0B8C1;
+  --ok:#00C473;--okL:#E6F9F1;--warn:#F04452;--warnL:#FEECEE;--cau:#FFB300;--cauL:#FFF8E1;--cauT:#B37A00;
+  --brix2:#A98CE4;--brix3:#8E6BDD;--sh:0 2px 8px rgba(0,0,0,.04);color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+body{background:#E8E4F0;display:flex;align-items:center;justify-content:center;min-height:100dvh;
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Gothic A1",sans-serif}
+button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer;text-align:left}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.ms{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;line-height:1;
+  letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;
+  direction:ltr;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;user-select:none;flex:0 0 auto}
+.ms.f{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+.frame{background:#26222E;border-radius:46px;padding:10px;box-shadow:0 4px 14px rgba(0,0,0,.2),0 36px 70px -34px rgba(0,0,0,.55)}
+.dev{width:390px;height:820px;background:var(--bg);border-radius:37px;overflow:hidden;position:relative;display:flex;flex-direction:column;color:var(--ink)}
+@media (max-width:440px),(max-height:880px){.fab{right:6px;bottom:auto;top:calc(50% - 19px);opacity:.55}body{display:block}.frame{padding:0;border-radius:0;box-shadow:none;height:100dvh}.dev{width:100vw;height:100dvh;border-radius:0}}
+
+/* ════ 설계서 1.2 타이포 ════ */
+.d{font-size:24px;line-height:32px;font-weight:700;color:var(--ink);letter-spacing:-.025em;margin:0}
+.h{font-size:20px;line-height:28px;font-weight:700;color:var(--ink);letter-spacing:-.02em;margin:0}
+.ti{font-size:18px;line-height:26px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.st{font-size:16px;line-height:24px;font-weight:600;color:var(--ink)}
+.bo{font-size:15px;line-height:22px;font-weight:400;color:var(--ink)}
+.ca{font-size:14px;line-height:20px;font-weight:400;color:var(--gray)}
+.sm{font-size:12px;line-height:16px;font-weight:400;color:var(--gray)}
+.lb{font-size:11px;line-height:14px;font-weight:600}
+.n{font-variant-numeric:tabular-nums}
+.p{color:var(--pri)!important}.w{color:var(--warn)!important}.g{color:var(--ok)!important}.k{color:var(--ink)!important}
+.b6{font-weight:600}.b7{font-weight:700}
+
+/* ════ 화면 ════ */
+.scr{display:none;flex-direction:column;flex:1 1 auto;min-height:0}
+.scr.on{display:flex;animation:in .28s ease-out}
+@keyframes in{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+.top{flex:0 0 auto;height:56px;display:flex;align-items:center;gap:2px;padding:0 8px;background:var(--sf)}
+.top .ic{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;color:var(--pri);font-size:22px}
+.top .ic:active{background:var(--bg)}
+.top h1{flex:1;min-width:0;margin:0;font-size:18px;line-height:26px;font-weight:600;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top .tb{height:48px;padding:0 12px;display:flex;align-items:center;gap:4px;font-size:14px;font-weight:600;color:var(--pri)}
+.body{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding:20px;display:flex;flex-direction:column;gap:12px}
+.body>*{flex:0 0 auto}
+.sec{display:flex;flex-direction:column;gap:12px}
+.g24{height:12px;flex:0 0 auto}
+.row{display:flex;align-items:center;gap:8px}
+.row.sb{justify-content:space-between}
+.row.tp{align-items:flex-start}
+.sp{flex:1;min-width:0}
+.hr{height:1px;background:var(--bd);margin:2px 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* 2.2 Card */
+.cd{background:var(--sf);border:1px solid var(--bd);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--sh)}
+.cd.tap{transition:transform .15s}.cd.tap:active{transform:scale(.98)}
+.cd.lt{background:var(--lt);border-color:transparent}
+.cd.pl{border-left:4px solid var(--pri);border-radius:6px 22px 22px 6px}
+.inner{background:var(--bg);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+
+/* 2.3 SelectableCard — 다섯 속성 */
+.sel{width:100%;background:var(--sf);border:1px solid var(--bd);border-radius:20px;padding:18px 20px;
+  display:flex;align-items:center;gap:16px;box-shadow:var(--sh);min-height:48px;
+  transition:background .15s,border-color .15s,padding .15s}
+.sel:active{transform:scale(.98)}
+.sel .em{width:40px;height:40px;border-radius:50%;background:var(--bg);color:var(--gray);display:grid;place-items:center;font-size:20px;flex:0 0 auto;transition:background .15s,color .15s}
+.sel .tx{flex:1;min-width:0}
+.sel .t{display:block;font-size:16px;line-height:24px;font-weight:600;color:var(--ink);transition:color .15s,font-weight .15s}
+.sel .s{display:block;font-size:14px;line-height:20px;color:var(--gray);margin-top:4px}
+.sel .rd{width:24px;height:24px;border-radius:50%;background:var(--bg);border:1px solid var(--bd);display:grid;place-items:center;font-size:15px;color:transparent;flex:0 0 auto;transition:.15s}
+.sel.on{border:2px solid var(--pri);padding:17px 19px;background:var(--lt)}
+.sel.on .em{background:var(--pri);color:#fff}
+.sel.on .t{font-weight:700;color:var(--prs)}
+.sel.on .rd{background:var(--pri);border-color:var(--pri);color:#fff}
+.sel.col{flex-direction:column;align-items:center;text-align:center;gap:12px;position:relative;padding:20px 14px}
+.sel.col.on{padding:19px 13px}
+.sel.col .rd{position:absolute;top:14px;right:14px}
+.sel.col .tx{flex:0 0 auto;width:100%}
+/* 긴급 카드 */
+.sel.urg{background:var(--warnL);border-color:var(--warn)}
+.sel.urg .em{background:var(--warn);color:#fff}
+.sel.urg .t{color:var(--warn);font-weight:700}
+.sel.urg .rd{background:var(--warn);border-color:var(--warn);color:#fff}
+.sel.urg:not(.off) .bg.wn{background:#FFF}
+.sel.urg.off{background:var(--sf);border-color:var(--bd)}
+.sel.urg.off .em{background:var(--bg);color:var(--gray)}
+.sel.urg.off .t{color:var(--ink);font-weight:600}
+.sel.urg.off .rd{background:var(--bg);border-color:var(--bd);color:transparent}
+
+/* 2.4 Chip — 미선택 Ink · nowrap */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips.sx{flex-wrap:nowrap;overflow-x:auto;margin:0 -20px;padding:0 20px 2px}
+.chip{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;
+  font-size:14px;line-height:20px;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:4px;
+  flex:0 0 auto;white-space:nowrap;transition:.15s;min-height:40px}
+.chip.on{background:var(--pri);border-color:var(--pri);color:#fff;font-weight:700}
+.chip .ck{width:0;overflow:hidden;opacity:0;transition:.15s;font-size:15px}
+.chip.on .ck{width:17px;opacity:1}
+.chip.sf{background:var(--sf)}
+.chip{position:relative}
+.chip::after{content:"";position:absolute;inset:-3px 0}
+.chip.sf.on{background:var(--pri)}
+/* 2.5 Badge */
+.bg{min-height:24px;border-radius:6px;padding:3px 6px;font-size:11px;line-height:14px;font-weight:600;
+  display:inline-flex;align-items:center;gap:3px;white-space:nowrap;background:var(--bg);color:var(--gray)}
+.bg.hi{background:var(--lt);color:var(--pri)}
+.bg.gn{background:var(--okL);color:var(--ok)}
+.bg.wn{background:var(--warnL);color:var(--warn)}
+.bg.yl{background:var(--cauL);color:var(--cauT)}
+.bg.fl{background:var(--pri);color:#fff}
+/* 2.6 Button */
+.btn{width:100%;min-height:54px;border-radius:16px;background:var(--pri);color:#fff;font-size:16px;line-height:24px;
+  font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px;text-align:center;transition:background .15s}
+.btn:active{background:var(--prs)}
+.btn.off{background:var(--bd);color:var(--dis)}
+.btn.ln{background:var(--sf);border:1px solid var(--bd);color:var(--pri);box-shadow:var(--sh)}
+.btn.ln:active{background:var(--bg)}
+.btn.gh{background:none;color:var(--gray);font-weight:500;min-height:48px;font-size:15px;box-shadow:none;border:0}
+.btn.gh:active{background:none}
+.cta{flex:0 0 auto;padding:12px 20px 16px;display:flex;flex-direction:column;gap:8px;background:linear-gradient(rgba(247,246,251,0),var(--bg) 24px)}
+/* 2.7 Input · Stepper */
+.inp{width:100%;min-height:56px;border-radius:16px;background:var(--sf);border:1px solid var(--bd);padding:0 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:16px;line-height:24px;box-shadow:var(--sh)}
+.inp .ph{color:var(--dis)}
+.inp .io{display:flex;gap:10px;color:var(--gray);font-size:20px;flex:0 0 auto}
+.ta{width:100%;min-height:110px;border-radius:16px;background:var(--sf);border:1px solid var(--bd);padding:16px;
+  box-shadow:var(--sh);display:flex;flex-direction:column;justify-content:space-between}
+.stp{width:100%;min-height:56px;border-radius:16px;background:var(--sf);border:1px solid var(--bd);
+  padding:0 12px 0 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--sh)}
+.stp .vv{min-width:56px;text-align:center}
+.stp .pm{width:36px;height:36px;border-radius:10px;background:var(--bg);color:var(--pri);display:grid;place-items:center;font-size:20px;font-weight:700}
+/* 2.8 IconCircle */
+.c64{width:64px;height:64px;border-radius:50%;background:var(--lt);color:var(--pri);display:grid;place-items:center;font-size:28px;flex:0 0 auto;transition:background .15s}
+.c56{width:56px;height:56px;border-radius:50%;background:var(--lt);color:var(--pri);display:grid;place-items:center;font-size:20px;font-weight:700;flex:0 0 auto}
+.c48{width:48px;height:48px;border-radius:50%;background:var(--lt);color:var(--pri);display:grid;place-items:center;font-size:22px;flex:0 0 auto}
+.c40{width:40px;height:40px;border-radius:50%;background:var(--lt);color:var(--pri);display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.c24{width:24px;height:24px;border-radius:50%;background:var(--lt);color:var(--pri);display:grid;place-items:center;font-size:14px;flex:0 0 auto}
+.av{position:relative;flex:0 0 auto}
+.av .vf{position:absolute;right:-2px;bottom:-2px;width:20px;height:20px;border-radius:50%;background:var(--ok);color:#fff;
+  display:grid;place-items:center;font-size:13px;border:2px solid var(--sf)}
+/* 2.10 Timeline */
+.tl{display:flex;flex-direction:column}
+.tli{display:grid;grid-template-columns:24px 1fr;gap:12px;position:relative;padding-bottom:16px;min-height:44px}
+.tli:not(:last-child)::before{content:"";position:absolute;left:11px;top:26px;bottom:0;width:2px;background:var(--bd)}
+.dot{width:24px;height:24px;border-radius:50%;background:var(--bg);border:1px solid var(--bd);display:grid;place-items:center;
+  font-size:15px;color:transparent;margin-top:1px;transition:.28s}
+.dot.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.dot.now{background:var(--pri);border-color:var(--pri);color:#fff;box-shadow:0 0 0 4px rgba(121,81,214,.16);animation:pl 1.5s ease-in-out infinite}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.6}}
+.tlt{min-width:0}
+.tli[data-s=wait] .tt{font-size:14px;line-height:20px;font-weight:400;color:var(--dis)}
+.tli[data-s=done] .tt{font-size:14px;line-height:20px;font-weight:400;color:var(--gray)}
+.tli[data-s=now] .tt{font-size:16px;line-height:24px;font-weight:700;color:var(--prs)}
+.tli .tm{font-size:12px;line-height:16px;color:var(--gray);margin-top:2px}
+.tli .nb{margin-top:8px;background:var(--lt);border:1px solid var(--pri);border-radius:14px;padding:12px}
+.tli .qb{margin-top:8px;background:var(--bg);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:6px;
+  font-size:14px;line-height:20px;color:var(--gray)}
+/* 2.11 CheckItem */
+.chk{width:100%;display:flex;align-items:flex-start;gap:10px;padding:8px 0;min-height:48px}
+.chk .bx{width:22px;height:22px;border-radius:6px;border:2px solid var(--dis);flex:0 0 auto;display:grid;place-items:center;
+  font-size:15px;color:transparent;margin-top:1px;transition:.15s}
+.chk.done .bx{background:var(--pri);border-color:var(--pri);color:#fff}
+.chk.done .t{text-decoration:line-through;color:var(--gray)}
+.chk .t{font-size:16px;line-height:24px;font-weight:500;color:var(--ink)}
+/* 2.12 Sheet */
+.mask{position:absolute;inset:0;background:rgba(25,31,40,.45);z-index:20;opacity:0;pointer-events:none;transition:opacity .25s}
+.mask.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--sf);border-radius:24px 24px 0 0;padding:12px 20px 20px;
+  z-index:21;display:flex;flex-direction:column;gap:16px;transform:translateY(105%);transition:transform .25s ease-out;max-height:90%;overflow-y:auto}
+.sheet.on{transform:none}
+.grab{width:36px;height:4px;border-radius:2px;background:var(--bd);margin:0 auto 4px;flex:0 0 auto}
+/* 2.13 Ticker */
+.tick{background:var(--sf);border:1px solid var(--bd);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh)}
+.tick .tt2{flex:1;min-width:0;font-size:12px;line-height:16px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .2s}
+/* 2.14 ListMenu */
+.menu{background:var(--sf);border:1px solid var(--bd);border-radius:22px;box-shadow:var(--sh);overflow:hidden}
+.menu button{width:100%;min-height:56px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:16px;line-height:24px}
+.menu button+button{border-top:1px solid var(--bd)}
+.menu .lf{display:flex;align-items:center;gap:12px;min-width:0}
+.dash{width:100%;border:2px dashed var(--dis);border-radius:22px;padding:18px;text-align:center;font-size:16px;line-height:24px;color:var(--gray);min-height:48px;
+  display:flex;align-items:center;justify-content:center;gap:6px}
+/* 2.15 Toast · Empty */
+.toast{position:absolute;left:20px;right:20px;bottom:84px;background:rgba(25,31,40,.93);color:#fff;border-radius:16px;padding:14px 16px;
+  font-size:15px;line-height:22px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none}
+.toast.on{opacity:1;transform:none;pointer-events:auto}
+.toast button{color:#FFF;font-weight:700;flex:0 0 auto;min-height:48px;padding:0 8px}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding:32px 20px}
+/* 기타 */
+.tip{background:var(--lt);border-radius:16px;padding:14px 16px;display:flex;align-items:flex-start;gap:8px;font-size:14px;line-height:20px;color:var(--pri)}
+.tip .ms{font-size:18px;margin-top:1px}
+.tip b{font-weight:700}
+.note{background:var(--cauL);border-radius:12px;padding:10px 12px;display:inline-flex;align-items:center;gap:6px;font-size:14px;line-height:20px;color:var(--cauT)}
+.tabs{flex:0 0 auto;height:64px;background:var(--sf);border-top:1px solid var(--bd);display:flex;align-items:center;padding:0 8px}
+.tabs button{flex:1;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  font-size:12px;line-height:16px;font-weight:600;color:var(--dis);border-radius:16px;transition:.15s;white-space:nowrap}
+.tabs button.on{color:var(--pri);font-weight:700;background:var(--lt)}
+.tabs .ms{font-size:22px}
+.prog{flex:0 0 auto;height:4px;background:var(--bd)}
+.prog i{display:block;height:100%;background:var(--pri);transition:width .28s ease-out}
+.otp{display:flex;gap:8px;justify-content:center}
+.otp span{flex:1;max-width:48px;height:52px;border-radius:12px;background:var(--bg);border:1px solid var(--bd);
+  display:grid;place-items:center;font-size:24px;line-height:32px;font-weight:700;color:var(--ink)}
+.otp span.e{color:var(--dis)}
+.bub{max-width:82%;padding:12px 14px;border-radius:18px;background:var(--sf);border:1px solid var(--bd);font-size:15px;line-height:22px;color:var(--ink)}
+.bub.me{background:var(--pri);border-color:var(--pri);color:#fff;margin-left:auto}
+.dbox{width:52px;border-radius:12px;background:var(--lt);padding:8px 0;text-align:center;flex:0 0 auto}
+.fab{position:fixed;right:16px;bottom:16px;z-index:50;width:38px;height:38px;border-radius:50%;background:rgba(25,31,40,.3);color:#fff;display:grid;place-items:center;font-size:19px}
+.idx{position:absolute;inset:0;z-index:60;background:rgba(25,31,40,.72);display:none;align-items:flex-end}
+.idx.on{display:flex}
+.idxb{background:var(--sf);border-radius:24px 24px 0 0;padding:16px;width:100%;max-height:86%;overflow-y:auto}
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.ig button{padding:12px;border-radius:12px;background:var(--bg);font-size:14px;line-height:20px;color:var(--ink);min-height:48px}
+.ig button.cur{background:var(--lt);color:var(--pri);font-weight:700}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<div class="frame"><div class="dev" id="dev">
+
+<!-- ═══ 로그인 ═══ -->
+<section class="scr" data-k="login" data-n="로그인">
+  <div class="top"><button class="ic ms" onclick="back()" aria-label="뒤로가기">arrow_back</button><h1 class="p b7">포도당</h1>
+    <button class="tb"><span class="ms" style="font-size:18px">call</span>상담</button></div>
+  <div class="body" style="gap:20px">
+    <div style="text-align:center;padding:24px 0 4px">
+      <div class="c64" style="width:96px;height:96px;font-size:44px;margin:0 auto 20px">🍇</div>
+      <p class="d">반가워요!</p>
+      <p class="ca" style="margin:8px 0 0">휴대폰 번호로 간편하게 시작해보세요.<br>가입 내역이 없으면 자동으로 가입돼요.</p>
+    </div>
+    <div>
+      <span class="ca b6 k">휴대폰 번호</span>
+      <div class="row" style="gap:8px;margin-top:8px">
+        <div class="inp sp"><span class="n">010-1234-5678</span></div>
+        <button class="btn ln" style="width:auto;min-height:56px;padding:0 18px;font-size:15px" onclick="sendOtp()">인증요청</button>
+      </div>
+    </div>
+    <div id="otpBox" style="display:none">
+      <div class="row sb" style="margin-bottom:8px">
+        <span class="ca b6 k">인증번호 입력</span><span class="ca b6 w n" id="otpT">3:00</span></div>
+      <div class="otp" id="otp"><span class="e">·</span><span class="e">·</span><span class="e">·</span><span class="e">·</span><span class="e">·</span><span class="e">·</span></div>
+      <div class="row" style="justify-content:center;gap:6px;margin-top:12px">
+        <span class="ca">인증번호가 오지 않나요?</span>
+        <button class="ca p b6" onclick="fillOtp()">재전송</button></div>
+    </div>
+    <div class="tip"><span class="ms">lightbulb</span><span>처음이시면 <b>자동으로 가입</b>돼요.<br>따로 가입 절차가 없어요.</span></div>
+  </div>
+  <div class="cta"><button class="btn off" id="lbtn" onclick="loginGo()">확인</button></div>
+</section>
+
+<!-- ═══ 홈 ═══ -->
+<section class="scr" data-k="home" data-n="홈">
+  <div class="top"><h1 class="p b7">포도당</h1>
+    <button class="ic ms">call</button></div>
+  <div class="body">
+    <div>
+      <p class="d">어떤 도움이<br>필요하신가요?</p>
+      <p class="ca" style="margin:8px 0 0">보호자님의 마음까지 케어할게요</p>
+    </div>
+    <div class="g2">
+      <button class="cd tap" style="gap:16px;min-height:150px" onclick="startForm('간병')">
+        <span class="st">간병</span><span class="ca">입원 중<br>곁을 지켜드려요</span>
+        <span class="c64" style="margin:auto 0 0 auto"><span class="ms f">personal_injury</span></span>
+      </button>
+      <button class="cd tap" style="gap:16px;min-height:150px" onclick="startForm('동행')">
+        <span class="st">동행</span><span class="ca">외래 · 검사<br>입퇴원 동행</span>
+        <span class="c64" style="margin:auto 0 0 auto"><span class="ms f">medical_services</span></span>
+      </button>
+    </div>
+    <button class="cd tap" style="flex-direction:row;align-items:center;gap:16px" onclick="startForm('방문')">
+      <span class="sp" style="text-align:left"><span class="st" style="display:block">방문 케어</span>
+        <span class="ca">집으로 찾아가는 돌봄</span></span>
+      <span class="c48"><span class="ms f">home_health</span></span>
+    </button>
+
+    <div class="g24"></div>
+    <h2 class="h">진행 중인 케어</h2>
+    <button class="cd tap pl" id="careCard" style="display:none" onclick="go('sched')">
+      <div class="row tp">
+        <span class="c40"><span class="ms f" style="font-size:20px">check_circle</span></span>
+        <span class="sp" style="text-align:left">
+          <span class="row sb"><span class="ca p b7">매칭 완료</span><span class="sm n">9월 5일 (목) 14:00</span></span>
+          <span class="st" style="display:block">어머니 · 서울아산병원 신관 7층</span>
+          <span class="ca">담당: 김영희 케어메이트</span></span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></div>
+    </button>
+    <button class="cd tap pl" onclick="go('feed')">
+      <div class="row tp">
+        <span class="c40"><span class="ms f" style="font-size:20px">notifications_active</span></span>
+        <span class="sp" style="text-align:left">
+          <span class="row sb"><span class="ca p b7">견적 도착</span><span class="sm n">오늘 필요해요</span></span>
+          <span class="st" style="display:block">어머니 · 병원 간병</span>
+          <span class="ca">지금 <b class="p">3명</b>이 견적을 보냈어요</span></span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></div>
+    </button>
+    <div class="tick"><span class="c24"><span class="ms" style="font-size:14px">bolt</span></span>
+      <span class="tt2" id="tick">방금 잠실 서울아산병원에서 매칭이 완료되었어요 (14만 원/일)</span></div>
+    <button class="cd tap lt" style="flex-direction:row;align-items:center;gap:16px">
+      <span class="c40" style="background:var(--sf)"><span class="ms" style="font-size:20px">auto_stories</span></span>
+      <span class="sp" style="text-align:left"><span class="st p" style="display:block">처음 오셨나요?</span>
+        <span class="ca">포도당 이용 가이드 보기</span></span>
+      <span class="ms p">chevron_right</span></button>
+  </div>
+  <nav class="tabs"></nav>
+</section>
+
+<!-- ═══ 폼 ═══ -->
+<section class="scr" data-k="form" data-n="견적 요청 폼">
+  <div class="top"><button class="ic ms" onclick="fBack()" aria-label="뒤로가기">arrow_back</button><h1 id="fTitle">돌봄 신청</h1>
+    <span class="ca p b7 n" style="padding:0 12px" id="fStep">1 / 5</span></div>
+  <div class="prog"><i id="fBar" style="width:20%"></i></div>
+  <div class="body" id="fBody"></div>
+  <div class="cta" id="fFoot"></div>
+</section>
+
+<!-- ═══ 신청내역 ═══ -->
+<section class="scr" data-k="apps" data-n="신청내역">
+  <div class="top"><h1>신청내역</h1><button class="ic ms">call</button></div>
+  <div class="body">
+    <p class="ca" style="margin:0">어머니를 위한 케어 일정을 확인해요.</p>
+    <div class="sec" id="upcoming" style="display:none">
+      <h2 class="h">다가오는 케어</h2>
+      <button class="cd tap" style="border:2px solid var(--pri);background:var(--lt)" onclick="go('sched')">
+        <div class="row" style="gap:12px">
+          <span class="c48" style="background:var(--sf);font-size:18px;font-weight:700">김</span>
+          <span class="sp" style="text-align:left"><span class="row sb">
+            <span class="st b7">김영희 케어메이트</span><span class="bg fl">매칭 완료</span></span>
+            <span class="ca p b7">18.8 °Brix</span></span></div>
+        <div class="hr"></div>
+        <div class="row" style="gap:8px"><span class="ms ca" style="font-size:18px">calendar_month</span>
+          <span class="bo">2026년 9월 5일 (목)</span></div>
+        <div class="row" style="gap:8px"><span class="ms ca" style="font-size:18px">schedule</span>
+          <span class="bo n">오후 2:00 ~ 6:00 (4시간)</span></div>
+        <div class="row" style="gap:8px"><span class="ms ca" style="font-size:18px">location_on</span>
+          <span class="bo">서울아산병원 신관 7층</span></div>
+      </button>
+    </div>
+    <div class="sec">
+      <h2 class="h">응답 기다리는 중 <span class="ca b6">1</span></h2>
+      <button class="cd tap pl" onclick="go('feed')">
+        <div class="row sb"><span class="st">어머니 · 병원 간병</span><span class="sm n">오늘</span></div>
+        <div class="ca p b6 row" style="gap:4px"><span class="ms" style="font-size:16px">visibility</span>12명이 봤고 · 견적 3개 도착</div>
+        <div class="ca">눌러서 견적을 비교하세요</div></button>
+    </div>
+    <div class="g24"></div>
+    <div class="sec">
+      <h2 class="h">지난 케어 <span class="ca b6">3</span></h2>
+      <div class="menu">
+        <button onclick="go('report')"><span class="lf">
+          <span class="c48" style="font-size:18px;font-weight:700">이</span>
+          <span><span class="st" style="display:block">이수진 케어메이트</span>
+            <span class="ca">서울대병원 · 6시간</span></span></span>
+          <span class="bg">완료</span></button>
+        <button onclick="go('report')"><span class="lf">
+          <span class="c48" style="font-size:18px;font-weight:700">박</span>
+          <span><span class="st" style="display:block">박지훈 케어메이트</span>
+            <span class="ca">강남세브란스 · 4시간</span></span></span>
+          <span class="bg">완료</span></button>
+        <button><span class="lf">
+          <span class="c48" style="background:var(--bg);color:var(--gray)"><span class="ms">person_off</span></span>
+          <span><span class="st" style="display:block">매칭 전 취소</span>
+            <span class="ca">자택 · 8시간</span></span></span>
+          <span class="bg">취소됨</span></button>
+      </div>
+    </div>
+  </div>
+  <nav class="tabs"></nav>
+</section>
+
+<!-- ═══ 견적 비교 ═══ -->
+<section class="scr" data-k="feed" data-n="견적 비교">
+  <div class="top"><button class="ic ms" onclick="back()" aria-label="뒤로가기">arrow_back</button><h1 class="p b7">포도당</h1>
+    <button class="ic ms">call</button></div>
+  <div class="body">
+    <div class="row" style="gap:8px"><span class="bg hi">매칭 진행 중</span><span class="sm n">신청번호 2405-0012</span></div>
+    <p class="d">어머니를 위한<br>케어메이트 견적이에요</p>
+    <div class="cd" style="gap:10px">
+      <div class="row tp" style="gap:12px">
+        <span class="c40"><span class="ms f" style="font-size:20px">notifications_active</span></span>
+        <span class="sp">
+          <span class="bo" style="display:block">지금 <b>12명</b>의 케어메이트가 공고를 확인했어요.</span>
+          <span class="ca" style="display:block;margin-top:4px"><b class="p">김＊희 님</b>이 새로운 견적을 보냈어요.</span>
+          <span class="sm" style="display:block;margin-top:4px">평균 매칭 소요 시간은 4시간이에요.</span></span></div>
+    </div>
+    <div class="chips sx">
+      <button class="chip sf on" onclick="oneChip(this)"><span class="ck ms">check</span>포도당 추천순</button>
+      <button class="chip sf" onclick="oneChip(this)"><span class="ck ms">check</span>거리순</button>
+      <button class="chip sf" onclick="oneChip(this)"><span class="ck ms">check</span>최저가순</button>
+      <button class="chip sf" onclick="oneChip(this)"><span class="ck ms">check</span>필터</button></div>
+
+    <div class="cd" style="border:2px solid var(--pri);background:var(--lt);gap:12px">
+      <div class="row" style="gap:12px">
+        <span class="av"><span class="c56" style="background:var(--sf)">이</span>
+          <span class="vf ms">check</span></span>
+        <span class="sp"><span class="row sb"><span class="ti b7">이서연 케어메이트</span>
+          <span class="sm n">2.4km</span></span>
+          <span class="ca">5년차 전문 요양보호사</span></span></div>
+      <div class="chips" style="gap:6px">
+        <span class="bg gn"><span class="ms" style="font-size:13px">verified_user</span>결격사유 확인</span>
+        <span class="bg">치매전문교육 이수</span><span class="bg">1억원 배상보험</span></div>
+      <div class="row" style="gap:8px"><b class="p" style="font-size:20px">18.8 °Brix</b>
+        <span class="ca">🧺x1 🍇8/15</span></div>
+      <div class="inner">
+        <div class="row sb"><span class="ca">제안 금액 (1일)</span><span class="h n">130,000원</span></div>
+        <p class="bo" style="margin:0;color:var(--gray)">“어머니 모시듯 따뜻하고 세심하게 케어해드려요. 욕창 방지 체위 변경 경험이 많습니다.”</p></div>
+      <button class="btn" onclick="go('profile')">프로필 보고 상담하기</button>
+    </div>
+
+    <div class="cd" style="gap:12px">
+      <div class="row" style="gap:12px">
+        <span class="av"><span class="c56">박</span><span class="vf ms">check</span></span>
+        <span class="sp"><span class="row sb"><span class="ti b7">박현주 케어메이트</span>
+          <span class="sm n">3.1km</span></span>
+          <span class="ca">중환자실 간병 10년</span></span></div>
+      <div class="chips" style="gap:6px">
+        <span class="bg gn"><span class="ms" style="font-size:13px">verified_user</span>결격사유 확인</span>
+        <span class="bg">간호조무사</span></div>
+      <div class="row" style="gap:8px"><b style="font-size:20px;color:var(--pri)">22.4 °Brix</b>
+        <span class="ca">🚚x1 🍇3/15</span></div>
+      <div class="inner">
+        <div class="row sb"><span class="ca">제안 금액 (1일)</span><span class="h n">145,000원</span></div>
+        <p class="bo" style="margin:0;color:var(--gray)">“대형 병원 중환자실 간병 경력 10년입니다. 위급 상황 대처 능력이 뛰어납니다.”</p></div>
+      <button class="btn ln" onclick="go('profile')">프로필 보고 상담하기</button>
+    </div>
+
+    <div class="cd" style="align-items:center;text-align:center;gap:10px;border-style:dashed">
+      <span class="c40" style="background:var(--bg);color:var(--gray)"><span class="ms">hourglass_empty</span></span>
+      <span class="ca">더 많은 케어메이트가<br>견적을 준비하고 있어요</span></div>
+  </div>
+  <nav class="tabs"></nav>
+</section>
+
+<!-- ═══ 프로필 ═══ -->
+<section class="scr" data-k="profile" data-n="케어메이트 프로필">
+  <div class="top"><button class="ic ms" onclick="back()" aria-label="뒤로가기">arrow_back</button><h1 class="p b7">포도당</h1>
+    <button class="ic ms">call</button></div>
+  <div class="body">
+    <div style="text-align:center;padding:8px 0">
+      <span class="av" style="display:inline-block">
+        <span class="c64" style="width:88px;height:88px;font-size:32px;font-weight:700">이</span>
+        <span class="vf ms" style="width:26px;height:26px;font-size:16px">check</span></span>
+      <p class="d" style="margin-top:12px">이서연 케어메이트</p>
+      <p class="ca row" style="justify-content:center;gap:4px;margin:4px 0 0">
+        <span class="ms" style="font-size:16px">workspace_premium</span>5년차 전문 요양보호사</p>
+    </div>
+    <div class="g2">
+      <div class="cd" style="align-items:center;text-align:center;gap:4px;padding:16px 12px">
+        <span class="sm">신뢰 온도</span>
+        <span class="p b7" style="font-size:26px;line-height:34px">18.8<span style="font-size:15px"> °Brix</span></span>
+        <span class="sm">명품 샤인머스캣</span></div>
+      <div class="cd" style="gap:6px;padding:16px 14px">
+        <span class="ca b6 g row" style="gap:4px"><span class="ms" style="font-size:16px">verified_user</span>결격사유 확인</span>
+        <span class="sm">자격 진위 · 서약 · 배상책임보험을 확인했어요</span></div>
+    </div>
+    <div class="g2" style="grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div class="cd" style="align-items:center;padding:12px 6px;gap:2px"><span style="font-size:22px">🚚</span><span class="ca b6 k">x1</span></div>
+      <div class="cd" style="align-items:center;padding:12px 6px;gap:2px"><span style="font-size:22px">🧺</span><span class="ca b6 k">x0</span></div>
+      <div class="cd" style="align-items:center;padding:12px 6px;gap:2px"><span style="font-size:22px">🍇</span><span class="ca b6 k n">12/15</span></div>
+    </div>
+    <div class="tip"><span class="ms">info</span>
+      <span>자격 진위 · 결격사유 서약 · 배상책임보험을 확인했어요<br>
+        <span class="ca">2026년 1월 확인 · 매년 다시 확인해요</span></span></div>
+    <div class="chips sx">
+      <button class="chip sf on" onclick="oneChip(this)"><span class="ck ms">check</span>정보</button>
+      <button class="chip sf" onclick="oneChip(this)"><span class="ck ms">check</span>리뷰 24</button>
+      <button class="chip sf" onclick="oneChip(this)"><span class="ck ms">check</span>포트폴리오</button></div>
+    <div class="cd"><span class="st">인사말</span>
+      <p class="bo" style="margin:0">안녕하세요, 부모님의 마음을 먼저 헤아리는 케어메이트 이서연입니다. 5년의 경험을 바탕으로 내 가족처럼 따뜻하고 전문적인 돌봄을 제공해요.</p></div>
+    <div class="cd" style="gap:14px">
+      <div class="row sb"><span class="st">주요 경력 요약</span><span class="ms" style="color:var(--dis)">chevron_right</span></div>
+      <div class="row tp" style="gap:12px"><span class="c40"><span class="ms" style="font-size:20px">medical_services</span></span>
+        <span class="sp"><span class="st" style="display:block">중증 치매 어르신 케어 전문</span>
+          <span class="ca">최근 3년간 15건 진행</span></span></div>
+      <div class="row tp" style="gap:12px"><span class="c40"><span class="ms" style="font-size:20px">accessible</span></span>
+        <span class="sp"><span class="st" style="display:block">재활 보행 보조 경험 풍부</span>
+          <span class="ca">병원 동행 및 산책 지원</span></span></div></div>
+    <div class="cd" style="gap:12px"><span class="st">보호자들이 남긴 칭찬</span>
+      <div class="g2">
+        <div class="inner" style="gap:4px"><span class="ca b6 k">친절하고 따뜻해요</span><span class="sm">24명 추천</span></div>
+        <div class="inner" style="gap:4px"><span class="ca b6 k">시간 약속을 잘 지켜요</span><span class="sm">18명 추천</span></div>
+        <div class="inner" style="gap:4px"><span class="ca b6 k">깔끔해요</span><span class="sm">15명 추천</span></div>
+        <div class="inner" style="gap:4px"><span class="ca b6 k">소통이 잘 돼요</span><span class="sm">12명 추천</span></div></div></div>
+    <div class="cd" style="gap:12px"><span class="st">포트폴리오</span>
+      <div class="g2">
+        <div class="inner" style="gap:2px"><span class="sm">총 경력</span>
+          <span class="h">5년 3개월</span><span class="sm">요양병원 및 재가방문</span></div>
+        <div class="inner" style="gap:6px"><span class="sm">보유 자격</span>
+          <span class="ca b6 k">요양보호사 1급</span><span class="ca b6 k">심폐소생술 (CPR)</span></div></div>
+      <div class="chips" style="margin-top:2px">
+        <span class="chip" style="pointer-events:none">중증 치매 케어</span>
+        <span class="chip" style="pointer-events:none">수술 후 재활 보조</span>
+        <span class="chip" style="pointer-events:none">당뇨 식단 관리</span>
+        <span class="chip" style="pointer-events:none">투약 관리</span></div></div>
+  </div>
+  <div class="cta"><button class="btn" onclick="go('chat')">
+    <span class="ms" style="font-size:20px">chat</span>채팅으로 상담하기</button></div>
+</section>
+
+<!-- ═══ 채팅 · 결제 ═══ -->
+<section class="scr" data-k="chat" data-n="채팅 · 결제">
+  <div class="top"><button class="ic ms" onclick="back()" aria-label="뒤로가기">arrow_back</button><h1>이서연 케어메이트</h1>
+    <button class="ic ms">call</button></div>
+  <div style="flex:0 0 auto;background:var(--okL);color:var(--ok);font-size:14px;line-height:20px;font-weight:600;
+    text-align:center;padding:10px;display:flex;align-items:center;justify-content:center;gap:6px">
+    <span class="ms" style="font-size:16px">lock</span>개인 전화번호는 전달되지 않아요</div>
+  <div class="body" style="gap:10px">
+    <div class="bub">안녕하세요, 어머니 간병 관련해 문의드려요.</div>
+    <div class="bub me">네 보호자님, 편하게 물어보세요.</div>
+    <div class="bub">체위 변경도 가능하실까요?</div>
+    <div class="bub me">네, 욕창 방지 체위 변경 경험이 많습니다. 결제 후 매칭이 확정돼요!</div>
+    <p class="sm" style="margin:0">오전 10:42</p>
+    <div class="cd" style="gap:14px">
+      <div class="cd lt" style="flex-direction:row;gap:10px;padding:14px;box-shadow:none">
+        <span class="ms p" style="font-size:20px">shield</span>
+        <span class="sp"><span class="ca b6 p" style="display:block">안심 결제 시스템</span>
+          <span class="sm">간병이 끝날 때까지<br>포도당이 비용을 안전하게 보관해요</span></span></div>
+      <div><span class="ti" style="display:block">결제 요청서</span><span class="ca">이서연 케어메이트</span></div>
+      <div class="inner">
+        <div class="row sb"><span class="ca">돌봄 대상</span><span class="bo b6">어머니</span></div>
+        <div class="row sb"><span class="ca">일정</span><span class="bo b6 n">9/5 (목) 14:00 ~ 18:00</span></div></div>
+      <div class="cd lt" style="flex-direction:row;justify-content:space-between;align-items:center;padding:14px;box-shadow:none">
+        <span class="st p">기본 서비스 비용</span><span class="h p n">130,000원</span></div>
+      <div class="row sb"><span class="ca">플랫폼 안심 이용료 <span class="bg" style="margin-left:2px">6%</span></span>
+        <span class="ca n">7,800원</span></div>
+      <div class="hr"></div>
+      <div class="row sb"><span class="st">총 결제 금액</span><span class="d p n">137,800원</span></div>
+      <button class="btn" onclick="pay()"><span class="ms" style="font-size:20px">lock</span>안전하게 결제하기</button></div>
+  </div>
+  <div style="flex:0 0 auto;padding:8px 20px 0"><div class="chips sx">
+    <button class="chip sf">야간 대응 되세요?</button><button class="chip sf">식사 보조</button>
+    <button class="chip sf">주차 가능한가요?</button></div></div>
+  <div style="flex:0 0 auto;background:var(--sf);border-top:1px solid var(--bd);padding:12px 20px;display:flex;align-items:center;gap:12px">
+    <span class="ms" style="color:var(--gray);font-size:22px">add_circle</span>
+    <span class="ca sp">메시지를 입력해주세요</span>
+    <span class="ms" style="color:var(--gray);font-size:20px">mic</span>
+    <span class="c40" style="width:36px;height:36px;background:var(--pri);color:#fff"><span class="ms" style="font-size:18px">send</span></span></div>
+</section>
+<!-- ═══ 일정 상세 ═══ -->
+<section class="scr" data-k="sched" data-n="일정 상세">
+  <div class="top"><button class="ic ms" onclick="back()" aria-label="뒤로가기">arrow_back</button><h1 class="p b7">포도당</h1>
+    <button class="ic ms">notifications</button></div>
+  <div class="body">
+    <div class="row" style="gap:8px"><span class="bg hi">예약 확정</span><span class="sm n">2026년 9월 5일 목요일</span></div>
+    <p class="d">어머니의 병원 간병 일정이<br>곧 시작해요.</p>
+    <div class="cd" style="gap:12px">
+      <div class="row" style="gap:12px">
+        <span class="av"><span class="c56">이</span><span class="vf ms">check</span></span>
+        <span class="sp"><span class="ti b7" style="display:block">이서연 케어메이트</span>
+          <span class="ca">18.8 °Brix · 돌봄 145회</span></span>
+        <span class="c40" style="background:var(--warnL);color:var(--warn)"><span class="ms" style="font-size:20px">call</span></span></div>
+      <div class="chips" style="gap:6px">
+        <span class="bg gn"><span class="ms" style="font-size:13px">verified_user</span>결격사유 확인</span>
+        <span class="bg">요양보호사 1급</span><span class="bg">심폐소생술 수료</span></div>
+    </div>
+    <div class="g24"></div>
+    <div class="sec">
+      <h2 class="h">의료진에게 문의할 내용이 있나요?</h2>
+      <p class="ca" style="margin:0">케어메이트가 대신 여쭤보고 기록해 드릴게요.</p>
+      <div id="qList"></div>
+      <div class="ta">
+        <span class="ca">예: 어머니 혈압 약을 언제부터 줄여도 될지 여쭤봐 주세요. 최근에 속쓰림이 있으셨다고 해요.</span>
+        <div class="row sb" style="margin-top:12px">
+          <span class="c40" style="background:var(--bg);color:var(--gray)"><span class="ms" style="font-size:20px">mic</span></span>
+          <button class="btn" style="width:auto;min-height:44px;padding:0 16px;font-size:15px" onclick="addQ()">
+            전달하기<span class="ms" style="font-size:18px">send</span></button></div></div>
+      <div><span class="ca b6 k">자주 묻는 질문 추가</span>
+        <div class="chips" style="margin-top:8px">
+          <button class="chip" onclick="addQ('식단 조절이 필요한지 여쭤봐 주세요')">＋ 식단 조절 필요성</button>
+          <button class="chip" onclick="addQ('다음 방문은 언제인지 여쭤봐 주세요')">＋ 다음 방문 일정</button>
+          <button class="chip" onclick="addQ('처방약 부작용이 있는지 여쭤봐 주세요')">＋ 처방약 부작용</button></div></div>
+    </div>
+    <div class="g24"></div>
+    <div class="cd" style="gap:14px"><span class="st">간병 정보</span>
+      <div class="hr"></div>
+      <div class="row tp" style="gap:12px"><span class="c40"><span class="ms" style="font-size:20px">local_hospital</span></span>
+        <span class="sp"><span class="ca" style="display:block">병원 및 병동</span>
+          <span class="bo b6">서울아산병원 신관 7층 (702호)</span></span></div>
+      <div class="row tp" style="gap:12px"><span class="c40"><span class="ms" style="font-size:20px">schedule</span></span>
+        <span class="sp"><span class="ca" style="display:block">일정 시간</span>
+          <span class="bo b6 n">오후 2:00 ~ 6:00 (4시간)</span></span></div>
+      <div class="row tp" style="gap:12px"><span class="c40"><span class="ms" style="font-size:20px">place</span></span>
+        <span class="sp"><span class="ca" style="display:block">만나는 곳</span>
+          <span class="bo b6">신관 7층 간호사실 앞</span></span></div></div>
+    <button class="btn ln" onclick="go('track')">진행 상황 보기</button>
+    <div class="menu">
+      <button><span class="lf"><span class="ms ca" style="font-size:20px">description</span>신청 내용 상세 보기</span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></button>
+      <button><span class="lf"><span class="ms ca" style="font-size:20px">credit_card</span>결제 내역 (137,800원)</span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></button>
+      <button><span class="lf w"><span class="ms w" style="font-size:20px">close</span>간병 취소하기</span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></button></div>
+  </div>
+</section>
+
+<!-- ═══ 진행 트래킹 ═══ -->
+<section class="scr" data-k="track" data-n="진행 트래킹">
+  <div class="top"><button class="ic ms" onclick="back()" aria-label="뒤로가기">arrow_back</button><h1 class="p b7">포도당</h1>
+    <button class="ic ms">call</button></div>
+  <div class="body">
+    <div class="cd" style="gap:12px">
+      <div class="row sb"><span class="st">어머니 · 병원 간병</span><span class="bg hi">진행 중</span></div>
+      <div class="hr"></div>
+      <div class="row" style="gap:12px">
+        <span class="av"><span class="c48" style="font-size:18px;font-weight:700">이</span><span class="vf ms">check</span></span>
+        <span class="sp"><span class="st" style="display:block">이서연 케어메이트</span>
+          <span class="ca">서울아산병원 | 오늘 14:00 시작</span></span></div></div>
+    <div class="tip"><span class="ms">info</span><span id="trackMsg">지금 어머니와 진료실에 함께 계세요.</span>
+    </div>
+    <div class="cd"><div class="tl" id="tl"></div></div>
+    <button class="btn ln" onclick="go('chat')"><span class="ms" style="font-size:20px">chat</span>케어메이트에게 연락하기</button>
+    <button class="btn gh" onclick="adv()">다음 단계 (진행자용)</button>
+    <button class="btn gh" onclick="sheet('ex')">예외 상황 (진행자용)</button>
+  </div>
+  <nav class="tabs"></nav>
+</section>
+
+<!-- ═══ Care Report ═══ -->
+<section class="scr" data-k="report" data-n="돌봄 리포트">
+  <div class="top"><button class="ic ms" onclick="back()" aria-label="뒤로가기">arrow_back</button><h1 class="p b7">포도당</h1>
+    <button class="ic ms">call</button></div>
+  <div class="body">
+    <div>
+      <p class="d">오늘의 돌봄 리포트</p>
+      <p class="ca" style="margin:8px 0 0">병원 간병이 안전하게 마무리되었어요.</p></div>
+
+    <div class="cd lt" id="todo" style="gap:4px">
+      <span class="st p row" style="gap:6px"><span class="ms f" style="font-size:20px">play_circle</span>
+        <span id="todoT">지금 하실 일 2개</span></span>
+      <button class="chk" onclick="tog(this)"><span class="bx ms">check</span>
+        <span class="sp"><span class="t">검사 예약 전화하기</span></span>
+        <span class="ca w b6" style="flex:0 0 auto">~9/10</span></button>
+      <button class="chk" onclick="tog(this)"><span class="bx ms">check</span>
+        <span class="sp"><span class="t">혈압약 아침으로 옮기기</span></span></button></div>
+
+    <div class="cd" style="border:2px solid var(--pri);gap:12px">
+      <span class="st p row" style="gap:6px"><span class="ms" style="font-size:20px">auto_awesome</span>AI 정리 노트</span>
+      <p class="bo" style="margin:0">의사 선생님께서 어머니의 혈압이 안정적이라고 하셨어요. 처방된 약은 식후 30분에 꼭 드시도록 챙겨주세요. 다음 진료는 2주 뒤입니다.</p>
+      <div class="cd lt" style="gap:6px;padding:14px;box-shadow:none">
+        <span class="ca b6 p row" style="gap:6px"><span class="c24"><span class="ms" style="font-size:14px">help</span></span>
+          보호자님 질문: 무릎 통증</span>
+        <p class="bo" style="margin:0">선생님 답변: “최근 운동량이 줄어서 그럴 수 있어요. 가벼운 스트레칭을 권장하며, 무리가 가지 않는 선에서 걷기 운동을 꾸준히 하시는 것이 좋습니다.”</p></div></div>
+
+    <div class="cd" style="gap:12px"><span class="st row" style="gap:6px">
+      <span class="ms" style="font-size:20px">event_upcoming</span>다음 진료 일정</span>
+      <div class="row" style="gap:14px">
+        <span class="dbox"><span class="sm p b6" style="display:block">9월</span>
+          <span class="h p n" style="display:block">24</span></span>
+        <span class="sp"><span class="ti" style="display:block">오후 2:30</span>
+          <span class="ca">서울아산병원 심장내과 (김의사 교수)</span></span></div>
+      <button class="btn ln" onclick="toast('캘린더에 추가했어요')">캘린더에 추가</button></div>
+
+    <div class="cd" style="gap:12px"><span class="st">간병 기본 정보</span>
+      <div class="g2">
+        <div class="inner" style="align-items:center;text-align:center;gap:6px">
+          <span class="c48" style="font-size:18px;font-weight:700">이</span>
+          <span class="ca b6 k">이서연 케어메이트</span>
+          <span class="bg gn">결격사유 확인</span></div>
+        <div class="inner" style="gap:10px">
+          <div class="row" style="gap:8px"><span class="ms ca" style="font-size:18px">schedule</span>
+            <span><span class="sm" style="display:block">간병 시간</span><span class="ca b6 k n">14:00 - 18:00</span></span></div>
+          <div class="row" style="gap:8px"><span class="ms ca" style="font-size:18px">local_hospital</span>
+            <span><span class="sm" style="display:block">병원</span><span class="ca b6 k">서울아산병원</span></span></div></div></div></div>
+
+    <div class="sec"><h2 class="h">상세 진행 내역</h2>
+      <div class="cd"><div class="tl">
+        <div class="tli" data-s="done"><span class="dot done ms">check</span>
+          <div class="tlt"><span class="tt">어머니 만남 완료</span>
+            <div class="tm">오후 2:00 · 병동 앞</div>
+            <p class="bo" style="margin:6px 0 0">어머니께서 밝은 표정으로 나와주셨어요.</p></div></div>
+        <div class="tli" data-s="done"><span class="dot done ms">check</span>
+          <div class="tlt"><span class="tt">진료실 동행 및 대기</span>
+            <div class="tm">오후 2:30 · 심장내과 외래</div>
+            <p class="bo" style="margin:6px 0 0">접수 후 대기 중입니다. 어머니께서 화장실에 다녀오셨어요.</p></div></div>
+        <div class="tli" data-s="done"><span class="dot done ms">check</span>
+          <div class="tlt"><span class="tt">진료 및 약 처방 완료</span>
+            <div class="tm">오후 3:15 · 1층 약국</div>
+            <div class="qb"><span class="ms" style="font-size:18px">receipt_long</span>처방전 영수증 1장</div></div></div>
+        <div class="tli" data-s="done"><span class="dot done ms">check</span>
+          <div class="tlt"><span class="tt" style="color:var(--ok)!important;font-weight:600">귀가 완료</span>
+            <div class="tm">오후 4:30 · 병실</div>
+            <p class="bo" style="margin:6px 0 0">어머니를 안전하게 병실까지 모셔다 드렸습니다. 수고 많으셨어요!</p></div></div>
+      </div></div></div>
+  </div>
+  <div class="cta"><button class="btn" onclick="toast('가족에게 공유했어요')">
+    <span class="ms" style="font-size:20px">share</span>카카오톡으로 가족에게 공유하기</button></div>
+</section>
+
+<!-- ═══ 리포트 보관함 ═══ -->
+<section class="scr" data-k="reports" data-n="리포트 보관함">
+  <div class="top"><h1>리포트 보관함</h1><button class="ic ms">search</button></div>
+  <div class="body">
+    <div class="cd lt" id="todo2" style="gap:4px">
+      <span class="st p row" style="gap:6px"><span class="ms f" style="font-size:20px">play_circle</span>
+        <span id="todoT2">아직 안 하신 일 2개</span></span>
+      <button class="chk" onclick="tog(this,1)"><span class="bx ms">check</span>
+        <span class="sp"><span class="t">검사 예약 전화하기</span><br><span class="sm">9/5 아산병원 간병</span></span>
+        <span class="ca w b6" style="flex:0 0 auto">~9/10</span></button>
+      <button class="chk" onclick="tog(this,1)"><span class="bx ms">check</span>
+        <span class="sp"><span class="t">혈압약 아침으로 옮기기</span><br><span class="sm">9/5 아산병원 간병</span></span></button></div>
+    <div class="g24"></div>
+    <p class="sm b7" style="margin:0;letter-spacing:.06em">2026년 9월</p>
+    <button class="cd tap" onclick="go('report')">
+      <div class="row sb"><span class="st">아산병원 병원 간병</span><span class="sm n">9/5</span></div>
+      <div class="row sb"><span class="ca">어머니 · 이서연 케어메이트</span>
+        <span class="bg yl" id="leftB">할 일 2개 남음</span></div></button>
+    <div class="g24"></div>
+    <p class="sm b7" style="margin:0;letter-spacing:.06em">2026년 8월</p>
+    <button class="cd tap" onclick="go('report')">
+      <div class="row sb"><span class="st">서울대병원 외래 동행</span><span class="sm n">8/21</span></div>
+      <div class="ca">어머니 · 이수진 케어메이트</div></button>
+    <button class="cd tap" style="opacity:.7" onclick="go('report')">
+      <div class="row sb"><span class="st">강남세브란스 동행</span><span class="sm n">8/07</span></div>
+      <div class="ca">어머니 · 박지훈 케어메이트</div></button>
+  </div>
+  <nav class="tabs"></nav>
+</section>
+
+<!-- ═══ 내정보 ═══ -->
+<section class="scr" data-k="my" data-n="내정보">
+  <div class="top"><h1 class="p b7">포도당</h1><button class="ic ms">notifications</button></div>
+  <div class="body">
+    <h2 class="h">가족 관리</h2>
+    <div class="cd" style="gap:14px">
+      <div class="row" style="gap:12px">
+        <span class="c48"><span class="ms">elderly_woman</span></span>
+        <span class="sp"><span class="ti b7" style="display:block">김순자 어머니</span>
+          <span class="ca">78세 · 여 · 요양등급 2등급</span></span>
+        <span class="c24" style="border:1px solid var(--bd);background:transparent"></span></div>
+      <div class="inner"><div class="g2">
+        <span><span class="sm" style="display:block">주요 질환</span><span class="ca b6 k">고혈압, 경증 치매</span></span>
+        <span><span class="sm" style="display:block">복약 정보</span><span class="ca b6 k">아침/저녁 식후 30분</span></span></div></div>
+      <div class="g2">
+        <button class="btn ln" style="min-height:48px;font-size:15px" onclick="go('reports')">돌봄 일지 보기</button>
+        <button class="btn ln" style="min-height:48px;font-size:15px" onclick="go('apps')">일정 관리</button></div></div>
+    <div class="cd" style="border:2px solid var(--pri);background:var(--lt);gap:14px">
+      <div class="row" style="gap:12px">
+        <span class="c48" style="background:var(--pri);color:#fff"><span class="ms f">elderly</span></span>
+        <span class="sp"><span class="ti b7 p" style="display:block">김영수 아버지</span>
+          <span class="ca">82세 · 남 · 요양등급 3등급</span></span>
+        <span class="c24" style="background:var(--pri);color:#fff"><span class="ms" style="font-size:15px">check</span></span></div>
+      <div class="inner" style="background:var(--sf)"><div class="g2">
+        <span><span class="sm" style="display:block">주요 질환</span><span class="ca b6 k">당뇨, 관절염</span></span>
+        <span><span class="sm" style="display:block">특이사항</span><span class="ca b6 k">거동 불편 (지팡이)</span></span></div></div>
+      <div class="row" style="margin-top:2px"><span class="ca w b6 row" style="gap:4px">
+        <span class="ms" style="font-size:16px">warning</span>94일 전 수정 · 건강 상태를 업데이트해 주세요</span></div>
+      <div class="g2">
+        <button class="btn" style="min-height:48px;font-size:15px" onclick="go('reports')">돌봄 일지 보기</button>
+        <button class="btn ln" style="min-height:48px;font-size:15px" onclick="go('apps')">일정 관리</button></div></div>
+    <button class="dash"><span class="ms">add</span>가족 추가하기</button>
+    <div class="g24"></div>
+    <h2 class="h">계정 관리</h2>
+    <div class="menu">
+      <button onclick="go('family')"><span class="lf"><span class="c40"><span class="ms" style="font-size:20px">group</span></span>가족 관리</span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></button>
+      <button><span class="lf"><span class="c40"><span class="ms" style="font-size:20px">credit_card</span></span>결제 관리</span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></button>
+      <button onclick="go('apps')"><span class="lf"><span class="c40"><span class="ms" style="font-size:20px">history</span></span>이용 내역</span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></button>
+      <button onclick="go('reports')"><span class="lf"><span class="c40"><span class="ms" style="font-size:20px">folder</span></span>리포트 보관함</span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></button>
+      <button><span class="lf"><span class="c40"><span class="ms" style="font-size:20px">settings</span></span>환경설정</span>
+        <span class="ms" style="color:var(--dis)">chevron_right</span></button></div>
+  </div>
+  <nav class="tabs"></nav>
+</section>
+
+<!-- ═══ 가족 관리 ═══ -->
+<section class="scr" data-k="family" data-n="가족 관리">
+  <div class="top"><button class="ic ms" onclick="back()" aria-label="뒤로가기">arrow_back</button><h1>가족 관리</h1></div>
+  <div class="body">
+    <p class="ca" style="margin:0">김순자 어머니를 함께 돌보는 가족이에요</p>
+    <div class="cd" style="flex-direction:row;align-items:center;gap:16px">
+      <span class="c48" style="font-size:18px;font-weight:700">박</span>
+      <span class="sp"><span class="st" style="display:block">박영순 (나)</span><span class="ca">3일 전 열람</span></span>
+      <span class="bg hi">주 보호자</span></div>
+    <div class="cd" style="flex-direction:row;align-items:center;gap:16px">
+      <span class="c48" style="font-size:18px;font-weight:700">김</span>
+      <span class="sp"><span class="st" style="display:block">김지훈</span><span class="ca">어제 리포트 열람</span></span>
+      <span class="bg">가족(열람+)</span></div>
+    <div class="cd" style="flex-direction:row;align-items:center;gap:16px;opacity:.75">
+      <span class="c48" style="background:var(--bg);color:var(--gray)"><span class="ms" style="font-size:22px">mail</span></span>
+      <span class="sp"><span class="st" style="display:block;color:var(--gray)">010-****-3344</span>
+        <span class="ca w b6">초대 대기 · 5일 남음</span></span>
+      <button class="ca" style="flex:0 0 auto;min-height:48px;display:grid;place-items:center">회수</button></div>
+    <button class="dash" onclick="sheet('inv')"><span class="ms">person_add</span>가족 초대하기</button>
+    <div class="g24"></div>
+    <div class="menu"><button><span class="lf"><span class="c40"><span class="ms" style="font-size:20px">visibility</span></span>누가 언제 봤는지</span>
+      <span class="ms" style="color:var(--dis)">chevron_right</span></button></div>
+  </div>
+</section>
+
+<!-- ═══ 오버레이 ═══ -->
+<div class="mask" id="mask" onclick="closeSheet()"></div>
+
+<div class="sheet" id="sh-cc"><div class="grab"></div>
+  <p class="d">방금 적으신 내용으로<br>회원 정보를 만들까요?</p>
+  <p class="ca" style="margin:0">다음에 신청하실 땐 이 부분을 건너뛰어요</p>
+  <div class="inner">
+    <div class="row" style="gap:16px"><span class="c48"><span class="ms">elderly_woman</span></span>
+      <span class="sp"><span class="st" style="display:block">김순자 어머니</span><span class="ca">78세 · 여</span></span></div>
+    <p class="bo" style="margin:0">부축 필요 · 160cm 52kg<br>식사 보조 · 화장실 이동 · 고혈압</p></div>
+  <div class="tip"><span class="ms">lightbulb</span><span>이름은 <b>계약이 확정된 케어메이트에게만</b> 보여요</span></div>
+  <button class="btn" onclick="closeSheet();go('apps');toast('회원 정보를 만들었어요')">회원 정보 만들기</button>
+  <button class="btn gh" onclick="closeSheet();go('apps')">다음에 할게요</button></div>
+
+<div class="sheet" id="sh-ex"><div class="grab"></div>
+  <p class="d">어머니 혈액검사가<br>추가로 필요해요</p>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div class="row sb"><span class="ca">예상 추가 시간</span><span class="st">40분</span></div>
+    <div class="row sb"><span class="ca">예상 추가 비용</span><span class="h n">15,000원</span></div></div>
+  <button class="btn" onclick="closeSheet();toast('케어메이트에게 전달했어요')">검사 진행해주세요</button>
+  <button class="btn gh" onclick="closeSheet()">오늘은 생략할게요</button>
+  <p class="ca" style="margin:0;text-align:center">5분 내에 답이 없으면 생략돼요</p></div>
+
+<div class="sheet" id="sh-inv"><div class="grab"></div>
+  <p class="d">어떤 권한으로<br>초대할까요?</p>
+  <button class="sel on" onclick="pickSel(this)"><span class="em ms">visibility</span>
+    <span class="tx"><span class="t">가족 (열람+)</span><span class="s">리포트·진행 상황 전체 + 요청사항 추가</span></span>
+    <span class="rd ms">check</span></button>
+  <button class="sel" onclick="pickSel(this)"><span class="em ms">summarize</span>
+    <span class="tx"><span class="t">가족 (열람)</span><span class="s">리포트 요약만 볼 수 있어요</span></span>
+    <span class="rd ms">check</span></button>
+  <div class="tip"><span class="ms">link</span><span>초대 링크는 <b>7일 안에 한 번만</b> 쓸 수 있어요</span></div>
+  <button class="btn" onclick="closeSheet();toast('초대 링크를 보냈어요')">카카오톡으로 초대하기</button>
+  <button class="btn gh" onclick="closeSheet()">문자로 초대하기</button></div>
+
+<div class="toast" id="toast"><span id="tmsg"></span><button onclick="hideT()">확인</button></div>
+<div class="idx" id="idx" onclick="if(event.target.id==='idx')closeIdx()">
+  <div class="idxb"><h3 class="ti" style="margin:0">진행자용</h3>
+    <p class="ca" style="margin:2px 0 0">아무 화면으로 이동합니다</p>
+    <div class="ig" id="ig"></div>
+    <button class="btn gh" style="margin-top:10px" onclick="reset()">처음부터 다시</button></div>
+</div>
+</div></div>
+<button class="fab ms" onclick="openIdx()" aria-label="화면 목록">menu</button>
+<script>
+var TABS=[['home','home','홈'],['apps','assignment','신청내역'],['reports','description','리포트'],['my','person','내정보']];
+var SCRL=[['login','로그인'],['home','홈'],['form','돌봄 신청 폼'],['apps','신청내역'],['feed','견적 비교'],
+ ['profile','케어메이트 프로필'],['chat','채팅 · 결제'],['sched','일정 상세'],['track','진행 트래킹'],
+ ['report','돌봄 리포트'],['reports','리포트 보관함'],['my','내정보'],['family','가족 관리']];
+var cur='login', svc='간병', HIST=[];
+
+function go(id,noPush){
+  var el=document.querySelector('.scr[data-k="'+id+'"]'); if(!el)return;
+  if(!noPush&&cur&&cur!==id){ HIST.push(cur); if(HIST.length>30)HIST.shift(); }
+  document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on')});
+  el.classList.add('on');
+  var b=el.querySelector('.body'); if(b)b.scrollTop=0;
+  cur=id; paintTabs(); closeIdx();
+}
+function back(){
+  if(HIST.length) go(HIST.pop(),true);
+  else if(cur!=='login') go('home',true);
+}
+function paintTabs(){
+  document.querySelectorAll('.tabs').forEach(function(bar){
+    bar.innerHTML=TABS.map(function(t){
+      var on=(t[0]===cur||(cur==='report'&&t[0]==='reports')||(cur==='feed'&&t[0]==='apps')||(cur==='track'&&t[0]==='apps'));
+      return '<button class="'+(on?'on':'')+'" onclick="go(\''+t[0]+'\')">'
+        +'<span class="ms'+(on?' f':'')+'">'+t[1]+'</span>'+t[2]+'</button>'}).join('');
+  });
+}
+/* ── 로그인 ── */
+function sendOtp(){ fillOtp(); toast('인증번호를 보냈어요'); }
+function fillOtp(){
+  document.getElementById('otpBox').style.display='';
+  var s=document.querySelectorAll('#otp span'), v='904218';
+  s.forEach(function(x,i){x.textContent=v[i];x.classList.remove('e')});
+  document.getElementById('lbtn').classList.remove('off');
+}
+function loginGo(){ if(!document.getElementById('lbtn').classList.contains('off')) go('home'); else toast('인증번호를 먼저 받아주세요'); }
+
+/* ── 선택 카드 빌더 ── */
+function sc(ico,t,s,on,cls){
+  return '<button class="sel'+(cls?' '+cls:'')+(on?' on':'')+'" onclick="pickSel(this)">'
+    +'<span class="em ms f">'+ico+'</span>'
+    +'<span class="tx"><span class="t">'+t+'</span>'+(s?'<span class="s">'+s+'</span>':'')+'</span>'
+    +'<span class="rd ms">check</span></button>';
+}
+/* ── 폼 5단계 ── */
+var STEPS=[
+ {n:1,t:'place',ti:'장소 선택',q:'어디서 돌봄이<br>필요하신가요?',s:'원하시는 돌봄 장소를 선택해주세요.'},
+ {n:2,t:'state',ti:'상태 입력',q:'현재 상태를<br>알려주세요',s:'정확할수록 맞는 케어메이트가 지원해요.'},
+ {n:3,t:'wh',   ti:'신체 정보',q:'키와 몸무게는<br>어떻게 되나요?',s:'케어메이트가 체력적으로 감당할 수 있는지 확인하기 위해 필요해요.'},
+ {n:4,t:'chip', ti:'돌봄 신청',q:'어떤 도움이<br>필요하신가요?',s:'필요한 케어 항목을 모두 선택해주세요.'},
+ {n:5,t:'last', ti:'최종 확인',q:'마지막으로<br>확인해 주세요',s:'입력하신 내용이 맞는지 꼼꼼히 확인해 주세요.'}];
+var fi=0;
+function startForm(k){ svc=k||'간병'; fi=0; renderF(); go('form') }
+function fBack(){ if(fi===0)back(); else {fi--;renderF()} }
+function fNext(){ if(fi<STEPS.length-1){fi++;renderF()} }
+
+var WH={h:160,w:52},WHR={h:[120,200],w:[25,150]};
+function stpRow(lb,k,v){
+  return '<div class="stp"><span class="ca">'+lb+'</span>'
+    +'<span class="row" style="gap:14px">'
+    +'<button class="pm" aria-label="'+lb+' 줄이기" onclick="bump(\''+k+'\',-1)">−</button>'
+    +'<span class="h n vv" id="wh-'+k+'">'+v+'</span>'
+    +'<button class="pm" aria-label="'+lb+' 늘리기" onclick="bump(\''+k+'\',1)">+</button></span></div>';
+}
+function bump(k,d){
+  var r=WHR[k],v=Math.min(r[1],Math.max(r[0],WH[k]+d));
+  WH[k]=v; document.getElementById('wh-'+k).textContent=v;
+}
+function renderF(){
+  var st=STEPS[fi],b=document.getElementById('fBody'),f=document.getElementById('fFoot');
+  document.getElementById('fStep').textContent=st.n+' / 5';
+  document.getElementById('fTitle').textContent=st.ti;
+  document.getElementById('fBar').style.width=(st.n/5*100)+'%';
+  var h='<div><p class="d">'+st.q+'</p><p class="ca" style="margin:8px 0 0">'+st.s+'</p></div>';
+  f.innerHTML='<button class="btn" onclick="fNext()">다음 단계로</button>';
+
+  if(st.t==='place'){
+    h+='<button class="sel urg off" onclick="this.classList.toggle(\'off\')">'
+      +'<span class="em ms f">emergency</span>'
+      +'<span class="tx"><span class="t">오늘 필요해요</span><span class="s">최대한 빠르게 배정해 드려요</span></span>'
+      +'<span class="bg wn" style="flex:0 0 auto">긴급 매칭</span></button>';
+    h+='<div class="g2">'
+      +sc('local_hospital','병원','입원실, 외래진료 등',true,'col')
+      +sc('home','집','자택, 요양원 등',false,'col')+'</div>';
+    h+='<div class="inp"><span class="row" style="gap:10px"><span class="ms io">search</span>'
+      +'<span class="ph">다른 병원 찾기</span></span><span class="io"><span class="ms">mic</span></span></div>';
+    h+='<div><span class="ca b6 k">자주 찾는 병원</span><div class="chips" style="margin-top:8px">'
+      +['서울아산병원 신관 7층','삼성서울병원','서울대학교병원']
+        .map(function(x,i){return '<button class="chip sf'+(i===0?' on':'')+'" onclick="oneChip(this)"><span class="ck ms">check</span>'+x+'</button>'}).join('')
+      +'</div></div>';
+  }
+  else if(st.t==='state'){
+    h+='<div><span class="ca b6 k">진단명</span>'
+      +'<div class="inp" style="margin-top:8px"><span>고혈압 · 경증 치매</span>'
+      +'<span class="io"><span class="ms">mic</span></span></div>'
+      +'<button class="ca" style="width:100%;text-align:right;min-height:48px;display:flex;align-items:center;justify-content:flex-end">모르겠어요 (건너뛰기)</button></div>';
+    h+='<div><span class="ca b6 k">거동 상태</span><div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">'
+      +sc('directions_walk','스스로 걸을 수 있어요','보조기구 없이 혼자 이동 가능해요',false)
+      +sc('elderly','부축이 필요해요','일어설 때 도움이 필요해요',true)
+      +sc('accessible','휠체어가 필요해요','휠체어 등 보조기구를 써요',false)
+      +sc('bed','누워만 계세요','종일 곁에서 돌봄이 필요해요',false)
+      +'</div></div>';
+  }
+  else if(st.t==='wh'){
+    h+=stpRow('키 (cm)','h',WH.h)+stpRow('몸무게 (kg)','w',WH.w);
+    h+='<div id="alt"><button class="btn gh" onclick="showRange()">정확한 수치를 잘 모르겠어요</button></div>';
+  }
+  else if(st.t==='chip'){
+    var A=['식사 보조','화장실 이동','기저귀 교체','체위 변경','산책 동행','투약 보조','목욕·세면','휠체어 이동','말벗'];
+    var B=['치매·섬망','석션(가래 흡인)','콧줄(위관영양)','소변줄(유치도뇨관)','루게릭·파킨슨','장루·요루','재활·물리치료 보조','격리병동(CRE/VRE)'];
+    h+='<div><span class="ca b6 k">일반 케어</span><div class="chips" style="margin-top:8px">'
+      +A.map(function(x,i){return '<button class="chip'+(i<2?' on':'')+'" onclick="pickChip(this)"><span class="ck ms">check</span>'+x+'</button>'}).join('')+'</div></div>';
+    h+='<div><span class="ca b6 k">전문 케어 (선택)</span><div class="chips" style="margin-top:8px">'
+      +B.map(function(x){return '<button class="chip" data-v="'+x+'" onclick="pickChip(this)"><span class="ck ms">check</span>'+x+'</button>'}).join('')
+      +'</div><div id="iso"></div></div>';
+    h+='<div><span class="ca b6 k">추가 요청사항 (선택)</span>'
+      +'<div class="ta" style="margin-top:8px"><span class="ca">예: 치매 관련 돌봄 경험이 있으신 분이면 좋겠습니다.</span>'
+      +'<div class="row" style="justify-content:flex-end;margin-top:12px">'
+      +'<span class="c40" style="background:var(--bg);color:var(--gray)"><span class="ms" style="font-size:20px">mic</span></span></div></div></div>';
+  }
+  else {
+    h='<div class="cd lt" style="flex-direction:row;align-items:flex-start;gap:12px">'
+      +'<span class="c40" style="background:var(--sf)"><span class="ms" style="font-size:20px">auto_awesome</span></span>'
+      +'<span class="sp"><span class="st p" style="display:block">이전 등록 정보를 불러왔어요</span>'
+      +'<span class="ca">수정이 필요한 부분만 확인해 주세요</span></span></div>'
+      +'<div><p class="d">'+st.q+'</p><p class="ca" style="margin:8px 0 0">'+st.s+'</p></div>'
+      +sum('calendar_month','일정',[['시작일','2026. 9. 5 (목)'],['시간','오후 2:00 ~ 6:00 (4시간)'],['서비스','병원 '+svc]])
+      +sum('location_on','장소',[['돌봄 장소','서울아산병원 신관 7층'],['주소','서울 송파구 올림픽로 43길 88']])
+      +sum('person','어머니 상태',[['성별 / 연령','여성 / 78세'],['거동','부축이 필요해요'],['체격',WH.h+'cm · '+WH.w+'kg'],['필요한 케어','식사 보조 · 화장실 이동']]);
+    f.innerHTML='<div class="tip"><span class="ms">lightbulb</span><span>등록하시면 <b>가까운 케어메이트에게 바로 알림</b>이 가요. 보통 <b>10분 안에 첫 견적</b>이 도착해요.</span></div>'
+      +'<button class="btn" onclick="sheet(\'cc\')">공고 등록하고 견적 받기</button>';
+  }
+  b.innerHTML=h;
+}
+function sum(ico,title,rows){
+  return '<div class="cd" style="gap:12px"><div class="row sb">'
+    +'<span class="ca row" style="gap:6px"><span class="ms" style="font-size:18px">'+ico+'</span>'+title+'</span>'
+    +'<span class="ca p b6">수정</span></div><div class="hr"></div>'
+    +rows.map(function(r){return '<div class="row sb tp"><span class="ca" style="flex:0 0 auto">'+r[0]+'</span>'
+      +'<span class="bo b6" style="text-align:right">'+r[1]+'</span></div>'}).join('')+'</div>';
+}
+function showRange(){
+  document.getElementById('alt').innerHTML='<div class="chips">'+['50kg 미만','50~70kg','70~90kg','90kg 이상']
+    .map(function(x,i){return '<button class="chip'+(i===1?' on':'')+'" onclick="oneChip(this)"><span class="ck ms">check</span>'+x+'</button>'}).join('')+'</div>';
+}
+function pickChip(el){
+  el.classList.toggle('on');
+  var t=document.getElementById('iso');
+  if(t){var iso=document.querySelector('.chip[data-v="격리병동(CRE/VRE)"]');
+    t.innerHTML=(iso&&iso.classList.contains('on'))
+      ?'<div class="tip" style="margin-top:12px"><span class="ms">shield</span><span><b>감염관리 교육 이수 필수</b><br>감염관리 교육을 이수한 케어메이트에게만 전달돼요</span></div>':''}
+}
+function oneChip(el){el.parentNode.querySelectorAll('.chip').forEach(function(c){c.classList.remove('on')});el.classList.add('on')}
+function pickSel(el){el.parentNode.querySelectorAll('.sel').forEach(function(x){x.classList.remove('on')});el.classList.add('on')}
+
+/* ── 결제 ── */
+function pay(){
+  document.getElementById('upcoming').style.display='';
+  document.getElementById('careCard').style.display='';
+  go('apps'); toast('결제됐어요. 케어가 확정됐어요');
+}
+/* ── 사전 질문 ── */
+var QS=['어머니 혈압 약을 언제부터 줄여도 될지 여쭤봐 주세요.'];
+function renderQ(){
+  var el=document.getElementById('qList'); if(!el)return;
+  el.innerHTML=QS.map(function(q,i){
+    return '<div class="cd" style="flex-direction:row;align-items:flex-start;gap:10px;margin-bottom:8px">'
+      +'<span class="c24"><span class="ms" style="font-size:14px">help</span></span>'
+      +'<span class="sp bo">'+q+'</span>'
+      +'<button class="ca" style="flex:0 0 auto;min-height:44px;display:grid;place-items:center" onclick="delQ('+i+')">삭제</button></div>'}).join('');
+}
+function addQ(t){QS.push(t||'다음 검사는 언제 받아야 하는지 여쭤봐 주세요');renderQ();toast('케어메이트에게 전달했어요')}
+function delQ(i){QS.splice(i,1);renderQ()}
+
+/* ── 트래킹 ── */
+var TL=[['케어메이트 도착','오전 09:00','병원에 도착했어요.','directions_car'],
+        ['투약 보조 및 확인','오전 09:35','진료실 앞에서 대기 중이에요.','medication'],
+        ['진료 및 검사','','현재 원장님 진료를 받고 계십니다.','stethoscope'],
+        ['약국 방문','','','local_pharmacy'],
+        ['간병 완료','','','task_alt']];
+var MSG=['어머니와 만나 병원으로 이동 중이에요.','병원에 도착해 접수 중이에요.','지금 어머니와 진료실에 함께 계세요.',
+         '약국에서 처방약을 받고 있어요.','간병이 무사히 끝났어요.'];
+var now=2;
+function renderTL(){
+  document.getElementById('tl').innerHTML=TL.map(function(t,i){
+    var st=i<now?'done':(i===now?'now':'wait');
+    var body='';
+    if(st==='done'){ body='<div class="tm n">'+t[1]+'</div>'
+      +(t[2]?'<div class="qb"><span class="ms" style="font-size:18px">'+t[3]+'</span>'+t[2]+'</div>':'') }
+    else if(st==='now'){ body='<div class="nb"><span class="tt" style="display:block">'+t[0]+'</span>'
+      +'<span class="ca" style="display:block;margin-top:4px">'+t[2]+'</span></div>'
+      +'<div class="note" style="margin-top:8px"><span class="ms" style="font-size:18px">credit_card</span>수납 대기 중이에요</div>' }
+    var head = st==='now' ? '' : '<span class="tt">'+t[0]+'</span>';
+    return '<div class="tli" data-s="'+st+'"><span class="dot '+(st==='wait'?'':st)+' ms">'
+      +(st==='done'?'check':(st==='now'?'radio_button_checked':''))+'</span>'
+      +'<div class="tlt">'+head+body+'</div></div>'}).join('');
+  document.getElementById('trackMsg').textContent=MSG[now];
+}
+function adv(){ if(now<TL.length-1){now++;if(!TL[now][1])TL[now][1]=['오전 10:20','오전 11:05','오후 12:40'][now-2]||'오후 1:00';renderTL()} else toast('간병이 완료됐어요') }
+
+/* ── 체크 ── */
+function tog(el,isTab){
+  el.classList.toggle('done');
+  ['todo','todo2'].forEach(function(id){
+    var c=document.getElementById(id); if(!c)return;
+    var left=2-c.querySelectorAll('.chk.done').length;
+    var t=document.getElementById(id==='todo'?'todoT':'todoT2');
+    if(left===0){ if(t)t.textContent='모든 할 일을 완료했어요 🎉';
+      c.querySelectorAll('.chk').forEach(function(x){x.style.display='none'}) }
+    else { if(t)t.textContent=(id==='todo'?'지금 하실 일 ':'아직 안 하신 일 ')+left+'개' }
+  });
+  var b=document.getElementById('leftB');
+  var c2=document.getElementById('todo2');
+  if(b&&c2){ var l2=2-c2.querySelectorAll('.chk.done').length;
+    if(l2===0)b.style.display='none'; else {b.style.display='';b.textContent='할 일 '+l2+'개 남음'} }
+  if(el.classList.contains('done'))toast('완료로 표시했어요');
+}
+/* ── 시트 · 토스트 ── */
+function sheet(id){document.getElementById('mask').classList.add('on');document.getElementById('sh-'+id).classList.add('on')}
+function closeSheet(){document.getElementById('mask').classList.remove('on');
+  document.querySelectorAll('.sheet').forEach(function(s){s.classList.remove('on')})}
+var tt;
+function toast(m){document.getElementById('tmsg').textContent=m;document.getElementById('toast').classList.add('on');
+  clearTimeout(tt);tt=setTimeout(hideT,2600)}
+function hideT(){document.getElementById('toast').classList.remove('on')}
+/* ── 진행자용 ── */
+function openIdx(){
+  document.getElementById('ig').innerHTML=SCRL.map(function(s){
+    return '<button class="'+(s[0]===cur?'cur':'')+'" onclick="go(\''+s[0]+'\')">'+s[1]+'</button>'}).join('');
+  document.getElementById('idx').classList.add('on');
+}
+function closeIdx(){document.getElementById('idx').classList.remove('on')}
+function reset(){
+  now=2; QS=['어머니 혈압 약을 언제부터 줄여도 될지 여쭤봐 주세요.'];
+  document.getElementById('upcoming').style.display='none';
+  document.getElementById('careCard').style.display='none';
+  document.getElementById('otpBox').style.display='none';
+  document.getElementById('lbtn').classList.add('off');
+  document.querySelectorAll('#otp span').forEach(function(x){x.textContent='·';x.classList.add('e')});
+  document.querySelectorAll('.chk').forEach(function(c){c.classList.remove('done');c.style.display=''});
+  var t1=document.getElementById('todoT'); if(t1)t1.textContent='지금 하실 일 2개';
+  var t2=document.getElementById('todoT2'); if(t2)t2.textContent='아직 안 하신 일 2개';
+  var b=document.getElementById('leftB'); if(b){b.style.display='';b.textContent='할 일 2개 남음'}
+  renderTL(); renderQ(); closeIdx(); HIST=[]; go('login',true);
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeIdx();closeSheet()}});
+var TICKS=['방금 잠실 서울아산병원에서 매칭이 완료되었어요 (14만 원/일)',
+ '삼성서울병원 70대 어르신 와상 케어 입찰 4건 접수 중',
+ '강남세브란스 외래 동행 매칭 완료 (시간당 2.2만 원)'];
+var ti=0;
+setInterval(function(){ti=(ti+1)%TICKS.length;var e=document.getElementById('tick');
+  if(e){e.style.opacity=0;setTimeout(function(){e.textContent=TICKS[ti];e.style.opacity=1},200)}},3800);
+renderTL(); renderQ(); paintTabs(); go('login');
+</script>
+</body></html>
