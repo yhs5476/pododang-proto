@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="95 82 316 286" width="100%" height="100%" fill="none">
+  <!-- Top Sprout on 'ㅍ' -->
+  <!-- Purple head dot -->
+  <circle cx="166" cy="177" r="16" fill="#5F3EB0"/>
+  
+  <!-- Green circle dot -->
+  <circle cx="197" cy="173" r="16" fill="#7CBD58"/>
+  
+  <!-- Sprout leaf (fresh green, angled ~45deg) -->
+  <path d="M 197 166 C 196 128 226 102 243 92 C 244 126 226 163 197 166 Z" fill="#7CBD58"/>
+
+  <!-- Left glyph: 'ㅍ' in signature brand purple -->
+  <!-- Top bar -->
+  <rect x="105" y="222" width="120" height="34" rx="17" fill="#5F3EB0"/>
+  <!-- Left vertical pillar -->
+  <rect x="127" y="239" width="26" height="106" rx="2" fill="#5F3EB0"/>
+  <!-- Right vertical pillar -->
+  <rect x="172" y="239" width="26" height="106" rx="2" fill="#5F3EB0"/>
+  <!-- Bottom bar -->
+  <rect x="105" y="327" width="120" height="34" rx="17" fill="#5F3EB0"/>
+
+  <!-- Middle glyph: 'ㄷ' / 'C' in vibrant green -->
+  <path d="M 298 239 L 272 239 C 254 239 240 255 240 291.5 C 240 328 254 344 272 344 L 298 344" 
+        fill="none" 
+        stroke="#7CBD58" 
+        stroke-width="34" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+  <!-- Right glyph: 'ㄷ' / 'C' in lighter leaf green -->
+  <path d="M 384 239 L 358 239 C 340 239 326 255 326 291.5 C 326 328 340 344 358 344 L 384 344" 
+        fill="none" 
+        stroke="#9ED377" 
+        stroke-width="34" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+</svg>
